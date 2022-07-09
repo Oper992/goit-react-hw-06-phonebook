@@ -1,0 +1,16 @@
+.title {
+  background-color: #3b5998;
+  color: white;
+  margin: 0;
+  padding: 20px 0 20px 10px;
+}
+
+.contactsTitle {
+  color: #3b5998;
+}
+
+.filteredContacts {
+  border-top: 1px solid gray;
+  padding-left: 10px;
+  margin-top: 20px;
+}

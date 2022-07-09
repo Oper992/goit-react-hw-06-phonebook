@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import style from './ContactForm.module.css';
 
 const INITIAL_STATE = {
   name: '',
@@ -37,7 +38,7 @@ export default function ContactForm({ addContacts }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={style.form}>
       <input
         type="text"
         name="name"
@@ -46,6 +47,7 @@ export default function ContactForm({ addContacts }) {
         title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
         required
         onChange={handleChange}
+        
       />
       <input
         type="tel"

@@ -1,12 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import ContactList from './ContactList/ContactList';
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  addContact,
+  addFilter,
+  deleteContacts,
+  addContactFromLocalStorage,
+} from '../redux/contacts';
+import style from './App.module.css';
 
 export function App() {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+  const contacts = useSelector(state => state.phonebook.contacts);
+  const filter = useSelector(state => state.phonebook.filter);
+  const dispatch = useDispatch();
+  // const [contacts, setContacts] = useState([]);
+  // const [filter, setFilter] = useState('');
 
   const addContacts = (contactName, contactNumber) => {
     const id = nanoid();
@@ -18,10 +29,9 @@ export function App() {
     ) {
       window.alert(`${contactName} is already in contacts`);
     } else {
-      setContacts(prevContacts => [
-        ...prevContacts,
-        { id: id, name: contactName, number: contactNumber },
-      ]);
+      dispatch(
+        addContact({ id: id, name: contactName, number: contactNumber })
+      );
     }
   };
 
@@ -32,13 +42,12 @@ export function App() {
   };
 
   const addToFilter = e => {
-    setFilter(e.target.value);
+    dispatch(addFilter(e.target.value));
+    // console.log(filter);
   };
 
   const deleteContact = e => {
-    setContacts(prevContacts => {
-      return prevContacts.filter(({ name }) => name !== e.target.value);
-    });
+    dispatch(deleteContacts(e.target.value));
   };
 
   useEffect(() => {
@@ -50,9 +59,9 @@ export function App() {
       contactsFromLastSession !== null &&
       contactsFromLastSession.length !== 0
     ) {
-      setContacts(contactsFromLastSession);
+      dispatch(addContactFromLocalStorage(contactsFromLastSession));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
@@ -60,14 +69,16 @@ export function App() {
 
   return (
     <>
-      <h1>Phonebook</h1>
+      <h1 className={style.title}>Phonebook</h1>
       <ContactForm addContacts={addContacts} />
-      <h2>Contacts</h2>
-      <Filter filter={filter} addToFilter={addToFilter} />
-      <ContactList
-        filteredContacts={filteredContacts()}
-        deleteContact={deleteContact}
-      />
+      <div className={style.filteredContacts}>
+        <h2 className={style.contactsTitle}>Contacts</h2>
+        <Filter filter={filter} addToFilter={addToFilter} />
+        <ContactList
+          filteredContacts={filteredContacts()}
+          deleteContact={deleteContact}
+        />
+      </div>
     </>
   );
 }
