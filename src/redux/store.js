@@ -12,12 +12,13 @@ import storage from 'redux-persist/lib/storage';
 import { configureStore } from '@reduxjs/toolkit';
 import { contacts } from './contacts';
 
-const persistConfig = {
+const rootPersistConfig = {
   key: 'root',
   storage,
+  blacklist: ['filter'],
 };
 
-const persistedReducer = persistReducer(persistConfig, contacts);
+const persistedReducer = persistReducer(rootPersistConfig, contacts);
 
 let store = configureStore({
   reducer: { phonebook: persistedReducer },
