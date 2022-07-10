@@ -4,56 +4,21 @@ const slice = createSlice({
   name: 'phonebook',
   initialState: { contacts: [], filter: '' },
   reducers: {
-    addContact: (state, action) => {
-      return {
-        contacts: [...state.contacts, action.payload],
-        filter: state.filter,
-      };
+    addContact(state, action) {
+      state.contacts.push(action.payload);
     },
-    addFilter: (state, action) => {
-      return { contacts: state.contacts, filter: action.payload };
+    addFilter(state, action) {
+      state.filter = action.payload;
     },
 
-    deleteContacts: (state, action) => {
-      return {
-        contacts: state.contacts.filter(({ name }) => name !== action.payload),
-        filter: state.filter,
-      };
-    },
-    addContactFromLocalStorage: (state, action) => {
-      return {
-        contacts: [...state.contacts, ...action.payload],
-        filter: state.filter,
-      };
+    deleteContacts(state, action) {
+      state.contacts = state.contacts.filter(
+        ({ name }) => name !== action.payload
+      );
     },
   },
 });
 
-// const contacts = createReducer(
-//   { contacts: [], filter: '' },
-//   {
-//     [addContact]: (state, action) => {
-//       return {
-//         contacts: [...state.contacts, action.payload],
-//         filter: state.filter,
-//       };
-//     },
-//     [addFilter]: (state, action) => {
-//       return { contacts: state.contacts, filter: action.payload };
-//     },
-//     [deleteContacts]: (state, action) => {
-//       return {
-//         contacts: state.contacts.filter(({ name }) => name !== action.payload),
-//         filter: state.filter,
-//       };
-//     },
-//   }
-// );
+export const { addContact, addFilter, deleteContacts } = slice.actions;
 
-export const {
-  addContact,
-  addFilter,
-  deleteContacts,
-  addContactFromLocalStorage,
-} = slice.actions;
 export const contacts = slice.reducer;
